@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Pratik Jamariya — Flutter & Swift developer, AI enthusiast, indie app builder from Porbandar, India."/>
+  <title>Pratik Jamariya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080c10;
+      --bg2: #0d1218;
+      --bg3: #131920;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #e8edf2;
+      --muted: #6b7a8d;
+      --accent: #4ADE80;
+      --accent2: #38bdf8;
+      --accent3: #f59e0b;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(74,222,128,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,222,128,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span { color: var(--muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      padding: 6rem 0 5rem;
+      position: relative;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(74,222,128,0.08);
+      border: 1px solid rgba(74,222,128,0.2);
+      color: var(--accent);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    h1 .name-line { display: block; color: var(--text); }
+    h1 .accent-line {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+    }
+
+    .hero-bio {
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-bio strong { color: var(--text); font-weight: 400; }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--bg2);
+    }
+
+    .tag.flutter { border-color: rgba(56,189,248,0.3); color: var(--accent2); background: rgba(56,189,248,0.05); }
+    .tag.ai { border-color: rgba(74,222,128,0.3); color: var(--accent); background: rgba(74,222,128,0.05); }
+    .tag.trading { border-color: rgba(245,158,11,0.3); color: var(--accent3); background: rgba(245,158,11,0.05); }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #080c10;
+      font-weight: 500;
+    }
+
+    .btn-primary:hover { background: #6ee7a0; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); }
+
+    /* SECTION LABEL */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-label .num {
+      color: var(--accent);
+      font-size: 10px;
+    }
+
+    /* APPS */
+    .apps { padding: 4rem 0; }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .app-card {
+      background: var(--bg2);
+      padding: 2rem;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .app-card:hover { background: var(--bg3); }
+    .app-card:hover::before { opacity: 1; }
+
+    .app-card.coming-soon { opacity: 0.5; cursor: default; }
+    .app-card.coming-soon:hover { background: var(--bg2); }
+    .app-card.coming-soon::before { display: none; }
+
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .app-icon.emi { background: #0D1B3E; border: 1px solid #1E3A6E; }
+    .app-icon.nocra { background: #1a0a2e; border: 1px solid #3b1e6e; }
+    .app-icon.soon { background: var(--bg3); border: 1px solid var(--border); }
+
+    .app-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .app-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    .app-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .app-platform {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .app-badge-pill {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge-live {
+      background: rgba(74,222,128,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(74,222,128,0.25);
+    }
+
+    .badge-soon {
+      background: rgba(107,122,141,0.1);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    /* ABOUT */
+    .about { padding: 4rem 0; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .about-cell {
+      background: var(--bg2);
+      padding: 1.5rem 2rem;
+    }
+
+    .about-cell-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .about-cell-value {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .about-cell-value.mono {
+      font-family: var(--font-mono);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stack-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .stack-item {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-left {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-right a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .footer-right a:hover { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CURSOR DOT */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .apps-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      h1 { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <nav>
+      <div class="nav-logo">pratik948<span>.github.io</span></div>
+      <ul class="nav-links">
+        <li><a href="#apps">Apps</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="https://github.com/Pratik948" target="_blank">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="hero-tag">Available for freelance &amp; consulting</div>
+
+      <h1>
+        <span class="name-line">Pratik</span>
+        <span class="accent-line">Jamariya<span class="cursor"></span></span>
+      </h1>
+
+      <p class="hero-bio">
+        Independent developer from <strong>Porbandar, Gujarat</strong> building mobile apps,
+        developer tools, and algorithmic trading systems.
+        I turn ideas into shipped products — fast.
+      </p>
+
+      <div class="hero-tags">
+        <span class="tag flutter">Flutter &amp; Dart</span>
+        <span class="tag flutter">Swift</span>
+        <span class="tag ai">AI &amp; Claude Code</span>
+        <span class="tag ai">LLM Integration</span>
+        <span class="tag trading">Algo Trading</span>
+        <span class="tag trading">NSE / BSE</span>
+        <span class="tag">Tauri &amp; Rust</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">Riverpod</span>
+        <span class="tag">Indie Builder</span>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#apps" class="btn btn-primary">View Apps</a>
+        <a href="https://github.com/Pratik948" target="_blank" class="btn btn-ghost">GitHub →</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="apps" id="apps">
+      <div class="section-label">
+        <span class="num">01</span> Apps
+      </div>
+
+      <div class="apps-grid fade-in">
+
+        <a href="https://play.google.com/store/apps/details?id=com.pratik948.emicalculator" target="_blank" class="app-card">
+          <div class="app-icon emi">₹</div>
+          <div class="app-name">EMI Calculator</div>
+          <div class="app-desc">
+            The only EMI calculator that exposes the real cost of no-cost EMI.
+            Processing fee + GST breakdown, amortization schedule, loan comparison and prepayment simulator.
+          </div>
+          <div class="app-meta">
+            <span class="app-platform">Android</span>
+            <span class="app-badge-pill badge-live">Live</span>
+          </div>
+        </a>
+
+        <div class="app-card coming-soon">
+          <div class="app-icon nocra">⏱</div>
+          <div class="app-name">NoCrastination</div>
+          <div class="app-desc">
+            A no-nonsense productivity app that keeps you accountable without the fluff.
+            Task management that gets out of your way.
+          </div>
+          <div class="app-meta">
+            <span class="app-platform">Android &amp; iOS</span>
+            <span class="app-badge-pill badge-soon">Coming Soon</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="about" id="about">
+      <div class="section-label">
+        <span class="num">02</span> About
+      </div>
+
+      <div class="about-grid fade-in">
+        <div class="about-cell">
+          <div class="about-cell-label">Location</div>
+          <div class="about-cell-value mono">Porbandar, Gujarat, India 🇮🇳</div>
+        </div>
+        <div class="about-cell">
+          <div class="about-cell-label">Currently building</div>
+          <div class="about-cell-value mono">Indie utility apps + Rentify SaaS</div>
+        </div>
+        <div class="about-cell">
+          <div class="about-cell-label">Day job</div>
+          <div class="about-cell-value mono">Flutter Engineer @ Fielddrive</div>
+        </div>
+        <div class="about-cell">
+          <div class="about-cell-label">Interests</div>
+          <div class="about-cell-value mono">Algo trading · Indian equities · Gym</div>
+        </div>
+        <div class="about-cell" style="grid-column: 1 / -1;">
+          <div class="about-cell-label">Stack</div>
+          <div class="about-cell-value">
+            <div class="stack-list">
+              <span class="stack-item">Flutter</span>
+              <span class="stack-item">Dart</span>
+              <span class="stack-item">Swift</span>
+              <span class="stack-item">Tauri</span>
+              <span class="stack-item">Rust</span>
+              <span class="stack-item">React</span>
+              <span class="stack-item">TypeScript</span>
+              <span class="stack-item">Python</span>
+              <span class="stack-item">Supabase</span>
+              <span class="stack-item">Firebase</span>
+              <span class="stack-item">Riverpod</span>
+              <span class="stack-item">Claude Code</span>
+              <span class="stack-item">Anthropic SDK</span>
+              <span class="stack-item">Zerodha Kite API</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-cell" style="grid-column: 1 / -1;">
+          <div class="about-cell-label">Open source &amp; personal projects</div>
+          <div class="about-cell-value" style="line-height:2.2;">
+            <a href="https://github.com/Pratik948/difforbit" target="_blank" style="color:var(--accent2);text-decoration:none;font-family:var(--font-mono);font-size:13px;">DiffOrbit</a>
+            <span style="color:var(--muted);font-family:var(--font-mono);font-size:13px;"> — AI-powered PR reviewer desktop app (Tauri + Claude)</span><br/>
+            <a href="https://github.com/Pratik948/matrix-ui" target="_blank" style="color:var(--accent2);text-decoration:none;font-family:var(--font-mono);font-size:13px;">MatrixUI</a>
+            <span style="color:var(--muted);font-family:var(--font-mono);font-size:13px;"> — Design system for developer tools</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <footer>
+      <div class="footer-left">
+        © 2026 Pratik Jamariya · Built with HTML &amp; ☕
+      </div>
+      <div class="footer-right">
+        <a href="https://github.com/Pratik948" target="_blank">GitHub</a>
+        <a href="mailto:jamariyapratik@email.com">Contact</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

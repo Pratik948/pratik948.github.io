@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="EMI Calculator — The only EMI calculator that exposes the real cost of no-cost EMI. Free Android app by Pratik Jamariya."/>
+  <title>EMI Calculator — by Pratik Jamariya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080c10;
+      --bg2: #0d1218;
+      --bg3: #131920;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #e8edf2;
+      --muted: #6b7a8d;
+      --accent: #4ADE80;
+      --accent2: #38bdf8;
+      --accent3: #f59e0b;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(74,222,128,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,222,128,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero { padding: 5rem 0 4rem; }
+
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(74,222,128,0.08);
+      border: 1px solid rgba(74,222,128,0.2);
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 5px 12px;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      font-family: var(--font-mono);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .app-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 7vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+
+    h1 .line1 { display: block; color: var(--text); }
+    h1 .line2 {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.18);
+    }
+
+    .hero-sub {
+      max-width: 540px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    .hero-sub strong { color: var(--text); font-weight: 400; }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: #080c10; font-weight: 500; }
+    .btn-primary:hover { background: #6ee7a0; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); }
+
+    /* SECTION LABEL */
+    .section-label {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-label .num { color: var(--accent); font-size: 10px; }
+
+    /* FEATURES */
+    .features { padding: 4rem 0; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--bg2);
+      padding: 1.75rem 2rem;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: var(--bg3); }
+
+    .feature-icon {
+      font-size: 20px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: rgba(74,222,128,0.08);
+      border: 1px solid rgba(74,222,128,0.2);
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 0.75rem;
+    }
+
+    /* NO COST EMI SPOTLIGHT */
+    .spotlight { padding: 0 0 4rem; }
+
+    .spotlight-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .spotlight-header {
+      padding: 1.75rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .spotlight-icon {
+      width: 40px; height: 40px;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .spotlight-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .spotlight-sub { font-size: 13px; color: var(--muted); }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .breakdown-cell {
+      background: var(--bg2);
+      padding: 1.25rem 1.5rem;
+    }
+    .breakdown-cell:hover { background: var(--bg3); }
+
+    .breakdown-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .breakdown-value {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .breakdown-value.green { color: var(--accent); }
+    .breakdown-value.amber { color: var(--accent3); }
+    .breakdown-value.red { color: #f87171; }
+    .breakdown-value.blue { color: var(--accent2); }
+
+    .breakdown-note { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    .callout {
+      margin: 0;
+      padding: 1rem 1.5rem;
+      background: rgba(245,158,11,0.05);
+      border-top: 1px solid rgba(245,158,11,0.15);
+      font-size: 13px;
+      color: #fbbf24;
+      line-height: 1.7;
+    }
+
+    /* INFO GRID */
+    .info { padding: 0 0 4rem; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .info-cell { background: var(--bg2); padding: 1.5rem 2rem; }
+    .info-cell-label {
+      font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .info-cell-value { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .info-cell-value strong { color: var(--text); font-weight: 400; }
+
+    .pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .pill {
+      font-size: 11px; padding: 3px 9px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 3px; color: var(--muted);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-left { font-size: 12px; color: var(--muted); }
+    .footer-right { display: flex; gap: 1.5rem; }
+    .footer-right a {
+      font-size: 12px; color: var(--muted);
+      text-decoration: none; letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .footer-right a:hover { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      h1 { font-size: 2.4rem; }
+      .info-grid { grid-template-columns: 1fr; }
+      .breakdown-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <nav>
+      <a href="/" class="nav-logo">pratik948<span>.github.io</span></a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#no-cost-emi">No-Cost EMI</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="/">← Back</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="app-badge">₹ EMI Calculator — Free on Android</div>
+
+      <h1>
+        <span class="line1">Honest EMI</span>
+        <span class="line2">Calculator</span>
+      </h1>
+
+      <p class="hero-sub">
+        The only EMI calculator that shows you the <strong>real cost of no-cost EMI</strong>.
+        Processing fees, 18% GST, hidden charges — all laid out clearly before you commit.
+        100% offline. No account. No nonsense.
+      </p>
+
+      <div class="hero-cta">
+        <a href="https://play.google.com/store/apps/details?id=com.pratik948.emicalculator" target="_blank" class="btn btn-primary">
+          Download on Play Store
+        </a>
+        <a href="privacy.html" class="btn btn-ghost">Privacy Policy →</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="features" id="features">
+      <div class="section-label"><span class="num">01</span> Features</div>
+
+      <div class="features-grid fade-in">
+
+        <div class="feature-card">
+          <span class="feature-icon">🔢</span>
+          <div class="feature-title">Standard EMI</div>
+          <div class="feature-desc">
+            Calculate monthly EMI for any loan instantly. Full amortization schedule, interest breakdown, and live recalculation as you type.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">⚠️</span>
+          <div class="feature-title">No-Cost EMI Truth</div>
+          <div class="feature-desc">
+            See the processing fee, 18% GST, effective interest rate, and total hidden cost — all before you swipe your card.
+          </div>
+          <span class="feature-tag">Key feature</span>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">⚖️</span>
+          <div class="feature-title">Loan Comparison</div>
+          <div class="feature-desc">
+            Compare two loans side by side. EMI, total interest, total payment — see the winner at a glance.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">💰</span>
+          <div class="feature-title">Prepayment Simulator</div>
+          <div class="feature-desc">
+            How many months early can you close the loan with a lump sum? See interest saved in real time.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📋</span>
+          <div class="feature-title">Amortization Schedule</div>
+          <div class="feature-desc">
+            Full month-by-month breakdown of principal, interest, and outstanding balance for any loan.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📱</span>
+          <div class="feature-title">100% Offline</div>
+          <div class="feature-desc">
+            All calculations happen on-device. No internet needed, no account required, no data collected.
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="spotlight" id="no-cost-emi">
+      <div class="section-label"><span class="num">02</span> No-Cost EMI Explained</div>
+
+      <div class="spotlight-box fade-in">
+        <div class="spotlight-header">
+          <div class="spotlight-icon">⚠️</div>
+          <div>
+            <div class="spotlight-title">No-cost EMI isn't actually free</div>
+            <div class="spotlight-sub">Here's what a ₹50,000 phone on 6-month no-cost EMI actually costs you</div>
+          </div>
+        </div>
+
+        <div class="breakdown-grid">
+          <div class="breakdown-cell">
+            <div class="breakdown-label">Product price</div>
+            <div class="breakdown-value blue">₹50,000</div>
+            <div class="breakdown-note">Stated MRP</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-label">Monthly EMI</div>
+            <div class="breakdown-value green">₹8,333</div>
+            <div class="breakdown-note">× 6 months</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-label">Processing fee (1%)</div>
+            <div class="breakdown-value amber">₹500</div>
+            <div class="breakdown-note">Charged upfront</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-label">GST on fee (18%)</div>
+            <div class="breakdown-value amber">₹90</div>
+            <div class="breakdown-note">Non-negotiable</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-label">Total you pay</div>
+            <div class="breakdown-value red">₹50,590</div>
+            <div class="breakdown-note">vs ₹50,000 listed</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-label">Effective rate</div>
+            <div class="breakdown-value red">~3.6% p.a.</div>
+            <div class="breakdown-note">Not 0%</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          ₹590 hidden cost — small but real. The app shows this for every tenure and every processing fee so you know before you buy.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <section class="info">
+      <div class="section-label"><span class="num">03</span> App Info</div>
+
+      <div class="info-grid fade-in">
+        <div class="info-cell">
+          <div class="info-cell-label">Platform</div>
+          <div class="info-cell-value"><strong>Android</strong> (iOS coming soon)</div>
+        </div>
+        <div class="info-cell">
+          <div class="info-cell-label">Price</div>
+          <div class="info-cell-value"><strong>Free</strong> — supported by ads</div>
+        </div>
+        <div class="info-cell">
+          <div class="info-cell-label">Works offline</div>
+          <div class="info-cell-value"><strong>Yes</strong> — no internet needed</div>
+        </div>
+        <div class="info-cell">
+          <div class="info-cell-label">Account required</div>
+          <div class="info-cell-value"><strong>No</strong> — open and use</div>
+        </div>
+        <div class="info-cell" style="grid-column: 1 / -1;">
+          <div class="info-cell-label">Built for</div>
+          <div class="info-cell-value">
+            <div class="pill-list">
+              <span class="pill">Home loans</span>
+              <span class="pill">Car loans</span>
+              <span class="pill">Personal loans</span>
+              <span class="pill">Phone / gadget EMI</span>
+              <span class="pill">Flipkart / Amazon no-cost EMI</span>
+              <span class="pill">Bajaj Finserv</span>
+              <span class="pill">Education loans</span>
+              <span class="pill">Prepayment planning</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-cell" style="grid-column: 1 / -1;">
+          <div class="info-cell-label">Developer</div>
+          <div class="info-cell-value">
+            Built by <a href="/" style="color:var(--accent2);text-decoration:none;">Pratik Jamariya</a> with ❤️.
+            —
+            Flutter developer from India.
+            <a href="https://github.com/Pratik948" target="_blank" style="color:var(--accent2);text-decoration:none;"> GitHub →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="container">
+    <footer>
+      <div class="footer-left">© 2026 Pratik Jamariya · EMI Calculator</div>
+      <div class="footer-right">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://github.com/Pratik948" target="_blank">GitHub</a>
+        <a href="mailto:jamariyapratik@email.com">Contact</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
